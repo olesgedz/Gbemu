@@ -1,0 +1,3 @@
+[submodule "windows_deps/check_s"]
+	path = windows_deps/check_s
+	url = https://github.com/libcheck/check.git
