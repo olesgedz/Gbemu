@@ -10,10 +10,10 @@ void cpu_init() {
 static void fetch_instruction() {
 	ctx.cur_opcode = bus_read(ctx.regs.pc++);
   	ctx.cur_inst = instruction_by_opcode(ctx.cur_opcode);
-	if (ctx.cur_inst == NULL) {
-	  printf("Unknown instruction %02X!\n", ctx.cur_opcode);
-	  exit(-7);
-	}
+//	if (ctx.cur_inst == NULL) {
+//	  printf("Unknown instruction %02X!\n", ctx.cur_opcode);
+//	  exit(-7);
+//	}
 }
 
 static void fetch_data() {
@@ -62,7 +62,13 @@ bool cpu_step() {
 	u16 pc = ctx.regs.pc;
 	fetch_instruction();
 	fetch_data();
-	printf("Executing Instruction: %02x PC: %04x\n", ctx.cur_opcode, pc);
+	printf("%04X: %-7s (%02X, %02X, %02X) A: %02X, B: %02X, C: %02X\n", pc, inst_name(ctx.cur_inst->type),
+		   bus_read(pc+1), bus_read(pc+2), ctx.regs.a, ctx.regs.b, ctx.regs.c);
+//	printf("Executing Instruction: %02x PC: %04x\n", ctx.cur_opcode, pc);
+	if (ctx.cur_inst == NULL) {
+	  printf("UNKNOWN INSTRUCTION %20X\n", ctx.cur_opcode);
+	  exit(-7);
+	}
 	execute();
   }
     return true;
