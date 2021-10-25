@@ -1,28 +1,6 @@
 #include <cpu.h>
+#include <bus.h>
 //processes CPU instructions...
-
-static void proc_none(cpu_context *ctx) {
-  printf("INVALID INSTRUCTION!\n");
-  exit(-7);
-}
-
-static void proc_nop(cpu_context *ctx) {
-
-}
-
-static void proc_di(cpu_context *ctx) {
-  ctx->int_master_enabled = false;
-}
-
-static void proc_ld(cpu_context *ctx) {
-  //TODO...
-}
-
-static void proc_xor(cpu_context *ctx) {
-  ctx->regs.a ^= ctx->fetched_data & 0xFF;
-  cpu_set_flags(ctx, ctx->regs.a == 0, 0, 0, 0);
-}
-
 
 void cpu_set_flags(cpu_context *ctx, char z, char n, char h, char c) {
   if (z != -1) {
@@ -40,6 +18,44 @@ void cpu_set_flags(cpu_context *ctx, char z, char n, char h, char c) {
   if (c != -1) {
 	BIT_SET(ctx->regs.f, 4, c);
   }
+}
+
+static void proc_none(cpu_context *ctx) {
+  printf("INVALID INSTRUCTION!\n");
+  exit(-7);
+}
+
+static void proc_nop(cpu_context *ctx) {
+
+}
+
+static void proc_di(cpu_context *ctx) {
+  ctx->int_master_enabled = false;
+}
+
+static void proc_ld(cpu_context *ctx) {
+
+  if (ctx->dest_is_mem) {
+	if (ctx->cur_inst->reg_2 >= RT_AF) {
+	  emu_cycles(1);
+	  bus_write16(ctx->mem_dest, ctx->fetched_data);
+	} else {
+	  bus_write(ctx->mem_dest, ctx->fetched_data);
+	}
+	return;
+  }
+  if (ctx->cur_inst->mode == AM_HL_SPR) {
+	u8 hflag = (cpu_read_reg(ctx->cur_inst->reg_2) & 0xF) + (ctx->fetched_data & 0xF) >= 0x10;
+	u8 cflag = (cpu_read_reg(ctx->cur_inst->reg_2) & 0xF) + (ctx->fetched_data & 0xFF) >= 0x100;
+	cpu_set_flags(ctx,0, 0, hflag, cflag);
+	cpu_set_reg(ctx->cur_inst->reg_1, cpu_read_reg(ctx->cur_inst->reg_2) + (char) ctx->fetched_data);
+  }
+  cpu_set_reg(ctx->cur_inst->reg_1, ctx->fetched_data);
+}
+
+static void proc_xor(cpu_context *ctx) {
+  ctx->regs.a ^= ctx->fetched_data & 0xFF;
+  cpu_set_flags(ctx, ctx->regs.a == 0, 0, 0, 0);
 }
 
 static bool check_cond(cpu_context *ctx) {
