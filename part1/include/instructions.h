@@ -23,7 +23,7 @@ typedef enum {
   AM_MR,
   AM_A16_R,
   AM_R_A16
-} 			addr_mode;
+} addr_mode;
 
 typedef enum {
   RT_NONE,
@@ -41,7 +41,7 @@ typedef enum {
   RT_HL,
   RT_SP,
   RT_PC
-} 			reg_type;
+} reg_type;
 
 typedef enum {
   IN_NONE,
@@ -93,19 +93,21 @@ typedef enum {
   IN_BIT,
   IN_RES,
   IN_SET
-} 				in_type;
+} in_type;
+
 typedef enum {
-  CT_NONE, CT_NZ, CT_NC, CT_C
-}				cond_type;
+  CT_NONE, CT_NZ, CT_Z, CT_NC, CT_C
+} cond_type;
 
 typedef struct {
-  in_type 		type;
-  addr_mode 	mode;
-  reg_type 		reg_1;
-  reg_type 		reg_2;
-  cond_type 	cond;
-  u8			param;
-} 				instruction;
+  in_type type;
+  addr_mode mode;
+  reg_type reg_1;
+  reg_type reg_2;
+  cond_type cond;
+  u8 param;
+} instruction;
 
-instruction  *instruction_by_opcode(u8 opcode);
+instruction *instruction_by_opcode(u8 opcode);
+
 char *inst_name(in_type t);

@@ -1,12 +1,13 @@
 #include <cpu.h>
 
 extern cpu_context ctx;
+
 u16 reverse(u16 n) {
   return ((n & 0xFF00) >> 8) | ((n & 0x00FF) << 8);
 }
 
 u16 cpu_read_reg(reg_type rt) {
-  switch (rt) {
+  switch(rt) {
 	case RT_A: return ctx.regs.a;
 	case RT_F: return ctx.regs.f;
 	case RT_B: return ctx.regs.b;
