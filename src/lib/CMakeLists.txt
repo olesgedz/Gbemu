@@ -4,7 +4,7 @@ file (GLOB sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/lib/*.c")
 
 file (GLOB headers CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.h")
 
-add_library(emu STATIC ${sources} ${headers} cpu_fetch.c ram.c stack.c)
+add_library(emu STATIC ${sources} ${headers})
 
 target_include_directories(emu PUBLIC ${PROJECT_SOURCE_DIR}/include )
 
@@ -12,6 +12,10 @@ target_include_directories(emu PUBLIC ${PROJECT_SOURCE_DIR}/include )
 if (WIN32)
   target_include_directories(emu PUBLIC "${PROJECT_SOURCE_DIR}/../windows_deps/sdl2/include" )
   target_include_directories(emu PUBLIC ${PROJECT_SOURCE_DIR}/../windows_deps/sdl2_ttf/include )
+  target_include_directories(emu PUBLIC ${PROJECT_SOURCE_DIR}/../windows_deps/)
+  target_include_directories(emu PUBLIC ${PROJECT_SOURCE_DIR}/../windows_deps/wpthreads/include)
+  set(WPTHREADS ${PROJECT_SOURCE_DIR}/../windows_deps/wpthreads/lib/x64/pthreadVC2.lib)
+  target_link_libraries(emu  ${WPTHREADS})
 else()
   target_include_directories(emu PUBLIC ${SDL2_INCLUDE_DIR})
   target_link_libraries(emu PUBLIC ${SDL2_LIBRARY}) 

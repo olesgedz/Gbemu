@@ -27,6 +27,18 @@ add_custom_command(
 
 if (WIN32)
 
+  add_custom_command(
+      TARGET ${PROJECT_NAME} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${PROJECT_SOURCE_DIR}/../windows_deps/wpthreads/lib/x64/pthreadVC2.lib #needed?
+      $<TARGET_FILE_DIR:${PROJECT_NAME}>
+      VERBATIM)
+  add_custom_command(
+      TARGET ${PROJECT_NAME} POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy
+      ${PROJECT_SOURCE_DIR}/../windows_deps/wpthreads/dll/x64/pthreadVC2.dll
+      $<TARGET_FILE_DIR:${PROJECT_NAME}>
+      VERBATIM)
 if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
   add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD
