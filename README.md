@@ -3,7 +3,8 @@
 
 https://github.com/alloncm/MagenBoy
  https://github.com/Baekalfen/PyBoy/raw/master/PyBoy.pdf
- 
+https://github.com/roblouie/gameboy-emulator/
+https://www.npmjs.com/package/gameboy-emulator
  
  https://izik1.github.io/gbops/  
 https://gekkio.fi/files/gb-docs/gbctr.pdf  
