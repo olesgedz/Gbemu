@@ -1,7 +1,7 @@
 
 set(MAIN_SOURCES
   main.c
-)
+    ../include/dbg.h)
 
 file (GLOB headers "${PROJECT_SOURCE_DIR}/include/*.h")
 
