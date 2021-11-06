@@ -11,6 +11,7 @@
 #ifdef WIN32
 #include <wpthreads/include/pthread.h>
 #include <windows.h>
+#include <ppu.h>
 #else
 #include <pthread.h>
 #include <unistd.h>
@@ -36,7 +37,7 @@ emu_context *emu_get_context() {
 void *cpu_run(void *p) {
   	timer_init();
     cpu_init();
-
+	ppu_init();
     ctx.running = true;
     ctx.paused = false;
     ctx.ticks = 0;
@@ -78,6 +79,8 @@ int emu_run(int argc, char **argv) {
         return -1;
     }
 
+	u32 prev_frame = 0;
+
     while(!ctx.die) {
 #ifdef WIN32
 	  Sleep(1);
@@ -85,7 +88,10 @@ int emu_run(int argc, char **argv) {
         usleep(1000);
 #endif
         ui_handle_events();
-	  	ui_update();
+	  if (prev_frame != ppu_get_context()->current_frame) {
+		ui_update();
+	  }
+	  prev_frame = ppu_get_context()->current_frame;
     }
 
     return 0;
@@ -96,6 +102,7 @@ void emu_cycles(int cpu_cycles) {
 	  for (int n = 0; n < 4; n++) {
 		ctx.ticks++;
 		timer_tick();
+		ppu_tick();
 	  }
 	  dma_tick();
 	}

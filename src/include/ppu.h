@@ -2,6 +2,11 @@
 
 #include <common.h>
 
+static const int LINES_PER_FRAME = 154;
+static const int TICKS_PER_LINE = 456;
+static const int YRES = 144;
+static const int XRES = 160;
+
 /*
 	* Bit7   BG and Window over OBJ (0=No, 1=BG and Window colors 1-3 over the OBJ)
 	* Bit6   Y flip          (0=Normal, 1=Vertically mirrored)
@@ -27,6 +32,10 @@ typedef struct {
 typedef struct {
 	oam_entry oam_ram[40];
 	u8 vram[0x2000];
+
+	u32 current_frame;
+	u32 line_ticks;
+	u32 *video_buffer;
 } ppu_context;
 
 void ppu_init();
@@ -36,3 +45,5 @@ void ppu_oam_write(u16 address, u8 value);
 u8 ppu_oam_read(u16 address);
 void ppu_vram_write(u16 address, u8 value);
 u8 ppu_vram_read(u16 address);
+
+ppu_context *ppu_get_context();
