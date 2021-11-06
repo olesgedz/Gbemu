@@ -7,7 +7,7 @@ link_directories(${CHECK_LIBRARY_DIRS})
 
 set(TEST_SOURCES
   check_gbe.c
-)
+	../include/dma.h)
 
 add_executable(check_gbe ${TEST_SOURCES})
 target_link_libraries(check_gbe emu ${CHECK_LIBRARIES})

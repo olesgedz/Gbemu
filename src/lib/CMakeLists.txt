@@ -4,7 +4,7 @@ file (GLOB sources CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/lib/*.c")
 
 file (GLOB headers CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/include/*.h")
 
-add_library(emu STATIC ${sources} ${headers} ../include/io.h io.c dbg.c)
+add_library(emu STATIC ${sources} ${headers} ../include/io.h io.c dbg.c dma.c)
 
 target_include_directories(emu PUBLIC ${PROJECT_SOURCE_DIR}/include )
 
