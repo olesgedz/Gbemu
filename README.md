@@ -1,6 +1,9 @@
 # Gbemu
-
-
+ Gameboy emulator
+# Screenshots
+## Dr.Mario
+<img src="https://github.com/olesgedz/Gbemu/blob/master/docs/screenshots/DrMarioGame.png?raw=false">
+<img src="https://github.com/olesgedz/Gbemu/blob/master/docs/screenshots/Dr_Mario.png?raw=false">
 https://github.com/alloncm/MagenBoy
  https://github.com/Baekalfen/PyBoy/raw/master/PyBoy.pdf
 https://github.com/roblouie/gameboy-emulator/
@@ -28,6 +31,11 @@ https://github.com/rockytriton/LLD_gbemu/raw/main/docs/The%20Cycle-Accurate%20Ga
 
 https://github.com/rockytriton/LLD_gbemu/raw/main/docs/gbctr.pdf
 http://www.emulator101.com/welcome.html
+
+## Tests
+https://github.com/mattcurrie/dmg-acid2
+
+https://github.com/c-sp/gameboy-test-roms
 
 ## Ressources
 
