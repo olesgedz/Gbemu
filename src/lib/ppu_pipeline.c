@@ -8,27 +8,30 @@ void pixel_fifo_push(u32 value) {
   next->value = value;
 
   if (!ppu_get_context()->pfc.pixel_fifo.head) {
-	// first
+	//first entry...
 	ppu_get_context()->pfc.pixel_fifo.head = ppu_get_context()->pfc.pixel_fifo.tail = next;
   } else {
 	ppu_get_context()->pfc.pixel_fifo.tail->next = next;
 	ppu_get_context()->pfc.pixel_fifo.tail = next;
   }
+
   ppu_get_context()->pfc.pixel_fifo.size++;
 }
 
 u32 pixel_fifo_pop() {
-	if (ppu_get_context()->pfc.pixel_fifo.size <= 0) {
-	  fprintf(stderr, "ERR IN PIXEL FIFO!\n");
-	  exit(-8);
-	}
-	fifo_entry  *popped = ppu_get_context()->pfc.pixel_fifo.head;
-  	ppu_get_context()->pfc.pixel_fifo.head = popped->next;
-	ppu_get_context()->pfc.pixel_fifo.size--;
+  if (ppu_get_context()->pfc.pixel_fifo.size <= 0) {
+	fprintf(stderr, "ERR IN PIXEL FIFO!\n");
+	exit(-8);
+  }
 
-	u32 val = popped->value;
-  	free(popped);
-  	return val;
+  fifo_entry *popped = ppu_get_context()->pfc.pixel_fifo.head;
+  ppu_get_context()->pfc.pixel_fifo.head = popped->next;
+  ppu_get_context()->pfc.pixel_fifo.size--;
+
+  u32 val = popped->value;
+  free(popped);
+
+  return val;
 }
 
 bool pipeline_fifo_add() {
@@ -41,8 +44,8 @@ bool pipeline_fifo_add() {
 
   for (int i=0; i<8; i++) {
 	int bit = 7 - i;
-	u8 hi = !!(ppu_get_context()->pfc.bgw_fetch_data[1] & (1 << bit)); //low
-	u8 lo = !!(ppu_get_context()->pfc.bgw_fetch_data[2] & (1 << bit)) << 1; // hi
+	u8 hi = !!(ppu_get_context()->pfc.bgw_fetch_data[1] & (1 << bit));
+	u8 lo = !!(ppu_get_context()->pfc.bgw_fetch_data[2] & (1 << bit)) << 1;
 	u32 color = lcd_get_context()->bg_colors[hi | lo];
 
 	if (x >= 0) {
@@ -50,6 +53,7 @@ bool pipeline_fifo_add() {
 	  ppu_get_context()->pfc.fifo_x++;
 	}
   }
+
   return true;
 }
 
@@ -95,6 +99,7 @@ void pipeline_fetch() {
 	  if (pipeline_fifo_add()) {
 		ppu_get_context()->pfc.cur_fetch_state = FS_TILE;
 	  }
+
 	} break;
 
   }
@@ -118,7 +123,7 @@ void pipeline_push_pixel() {
 void pipeline_process() {
   ppu_get_context()->pfc.map_y = (lcd_get_context()->ly + lcd_get_context()->scroll_y);
   ppu_get_context()->pfc.map_x = (ppu_get_context()->pfc.fetch_x + lcd_get_context()->scroll_x);
-  ppu_get_context()->pfc.tile_y = ((lcd_get_context()->ly + lcd_get_context()->scroll_y % 8) * 2);
+  ppu_get_context()->pfc.tile_y = ((lcd_get_context()->ly + lcd_get_context()->scroll_y) % 8) * 2;
 
   if (!(ppu_get_context()->line_ticks & 1)) {
 	pipeline_fetch();
@@ -131,5 +136,6 @@ void pipeline_fifo_reset() {
   while(ppu_get_context()->pfc.pixel_fifo.size) {
 	pixel_fifo_pop();
   }
+
   ppu_get_context()->pfc.pixel_fifo.head = 0;
 }
