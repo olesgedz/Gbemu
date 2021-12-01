@@ -63,9 +63,21 @@ typedef struct {
   unsigned f_bgp : 1;
 } oam_entry;
 
+typedef  struct _oam_line_entry {
+ oam_entry entry;
+ struct  _oam_line_entry *next;
+} oam_line_entry;
+
 typedef struct {
 	oam_entry oam_ram[40];
 	u8 vram[0x2000];
+
+	u8 line_sprite_count; // 0 to 10
+	oam_line_entry *line_sprites; //head of linked list
+	oam_line_entry line_entry_array[10];
+
+	u8 fetched_entry_count;
+	oam_entry fetched_entries[3];
 
 	pixel_fifo_context pfc;
 
