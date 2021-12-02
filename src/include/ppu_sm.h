@@ -1,4 +1,5 @@
 #pragma once
+
 #include <common.h>
 
 void ppu_mode_oam();

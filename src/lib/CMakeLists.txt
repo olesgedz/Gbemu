@@ -18,8 +18,6 @@ if (WIN32)
   target_link_libraries(emu  ${WPTHREADS})
 else()
   target_include_directories(emu PUBLIC ${SDL2_INCLUDE_DIR})
-  target_link_libraries(emu PUBLIC ${SDL2_LIBRARY}) 
-  target_link_libraries(emu PUBLIC ${SDL2_TTF_LIBRARY}) 
 endif()
 
 include_directories("/usr/local/include")

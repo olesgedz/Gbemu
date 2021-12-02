@@ -5,7 +5,7 @@
 #include <ui.h>
 #include <timer.h>
 #include <dma.h>
-
+#include <ppu.h>
 #define _TIMESPEC_DEFINED
 //TODO Add Windows Alternative...
 #ifdef WIN32
