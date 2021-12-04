@@ -50,7 +50,6 @@ typedef struct {
     unsigned f_x_flip : 1;
     unsigned f_y_flip : 1;
     unsigned f_bgp : 1;
-
 } oam_entry;
 
 //typedef struct {

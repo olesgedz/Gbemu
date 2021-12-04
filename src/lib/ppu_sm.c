@@ -30,7 +30,8 @@ void load_line_sprites() {
 
   for (int i=0; i<40; i++) {
 	oam_entry e = ppu_get_context()->oam_ram[i];
-
+	printf("size is %zu, %X, %X, %X, %X, %X, %X, %X, %X, %X\n", sizeof(e), e.y, e.x,
+		   e.tile, e.f_cgb_pn, e.f_cgb_vram_bank, e.f_pn,  e.f_x_flip, e.f_y_flip, e.f_bgp);
 	if (!e.x) {
 	  //x = 0 means not visible...
 	  continue;
