@@ -90,7 +90,7 @@ typedef struct {
 
     u8 fetched_entry_count;
     oam_entry fetched_entries[3];
-
+	u8 window_line;
     pixel_fifo_context pfc;
 
     u32 current_frame;
@@ -109,3 +109,4 @@ void ppu_vram_write(u16 address, u8 value);
 u8 ppu_vram_read(u16 address);
 
 ppu_context *ppu_get_context();
+bool window_visible();
