@@ -1,10 +1,16 @@
 #include <cart.h>
+#include <string.h>
 
 typedef struct {
     char filename[1024];
     u32 rom_size;
     u8 *rom_data;
     rom_header *header;
+  	int bank;
+	bool init;
+	u8 data[0xFFFF];
+	bool switched;
+
 } cart_context;
 
 static cart_context ctx;
@@ -141,7 +147,9 @@ bool cart_load(char *cart) {
 
     fseek(fp, 0, SEEK_END);
     ctx.rom_size = ftell(fp);
-
+	ctx.init = false;
+	ctx.switched = false;
+	ctx.bank = 0;
     rewind(fp);
 
     ctx.rom_data = malloc(ctx.rom_size);
@@ -163,7 +171,19 @@ bool cart_load(char *cart) {
     for (u16 i=0x0134; i<=0x014C; i++) {
         x = x - ctx.rom_data[i] - 1;
     }
-
+  	printf("TYPE - %X\n",  ctx.header->type);
+	switch(ctx.header->type) {
+	  case 0: {
+		printf("Cartridge Loaded: NROM\n");
+	  } break;
+	  case 1: {
+		printf("Cartridge Loaded:MPC1\n");
+	  } break;
+	  default: {
+		printf("UNSUPPORTED MAPPER\n");
+		exit(-1);
+	  }
+	}
     printf("\t Checksum : %2.2X (%s)\n", ctx.header->checksum, (x & 0xFF) ? "PASSED" : "FAILED");
 
     return true;
@@ -171,14 +191,84 @@ bool cart_load(char *cart) {
 
 u8 cart_read(u16 address) {
     //for now just ROM ONLY type supported...
+	if (ctx.header->type == 1) {
+	  if (!ctx.init) {
+		printf("INIT\n");
+		memcpy(ctx.data, ctx.rom_data, 0x8000);
+		ctx.init = true;
+	  }
+/*
+    if (init) {
+        //cout << "READ: " << Short(address) << endl;
 
-    return ctx.rom_data[address];
+        if (switched && address >= 0x4000 && bank > 1) {
+            cout << "READ: " << Short(address) << " to " << std::hex << (int)(address + (bank * 0x4000))<< endl;
+            sleepMs(500);
+        } else if (bank > 1) {
+            cout << "BANK0READ: " << Short(address) << endl;
+        }
+
+        //return memory::ram[address];
+        //return data[address];
+    }
+*/
+	  if (address < 0x4000) {
+		return ctx.rom_data[address];
+	  }
+
+	  if (ctx.bank > 1) {
+		//cout << "BANK READ: " << (int)bank << " - " << Short(address) << " to " << std::hex << (int)(address + (bank * 0x4000)) << endl;
+		//sleepMs(200);
+	  }
+
+	  return ctx.rom_data[address + (ctx.bank * 0x4000) - 0x4000];
+	} else {
+	  return ctx.rom_data[address];
+	}
 }
 
 void cart_write(u16 address, u8 value) {
     //for now, ROM ONLY...
+  if (ctx.header->type == 1) {
 
-    printf("cart_write(%04X)\n", address);
+	if (!ctx.init) {
+	  memcpy(ctx.data, ctx.rom_data, 0x8000);
+	  ctx.init = true;
+	}
+/*
+    if (init) {
+        if (address >= 0x2000 && address <= 0x3FFF) {
+            bank = b & 0x1F;
+            if(bank == 0 || bank == 0x20 || bank == 0x40 || bank == 0x60)
+                bank++;
+
+            switched = true;
+
+            cout << "SWITCHING BANK: " << (int) bank << endl;
+            sleepMs(200);
+
+            memcpy(&data[0x4000], cart::g_romData + (bank * 0x4000), 0x4000);
+        }
+        return;
+    }
+*/
+	if (address >= 0x6000) {
+	  //TODO: Memory model select...
+	} else if (address >= 0x2000 && address <= 0x3FFF) {
+	  ctx.bank = value & 0x1F;
+
+	  if (ctx.bank == 0 || ctx.bank == 0x20 || ctx.bank == 0x40 || ctx.bank == 0x60) {
+		ctx.bank++;
+	  }
+
+	  if (ctx.bank * 0x4000 > ctx.rom_size - 0x4000) {
+		printf( "FAILURE IN MAPPER CONTROL\n");
+		exit(-1);
+	  }
+	}
+  } else {
+	printf("cart_write(%04X)\n", address);
+  }
 //    NO_IMPL
 }
 
