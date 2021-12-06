@@ -31,7 +31,6 @@ void dma_tick() {
 	ctx.byte++;
 	ctx.active = ctx.byte < 0xA0;
 	if (!ctx.active) {
-	  printf("DNA DONE!\n");
 #ifdef WIN32
 	  Sleep(2 * 10); //TODO: something wrong with sleep
 #else
