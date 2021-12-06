@@ -6,7 +6,7 @@ typedef struct {
     u32 rom_size;
     u8 *rom_data;
     rom_header *header;
-  	int bank;
+  	u8 bank;
 	bool init;
 	u8 data[0xFFFF];
 	bool switched;
@@ -181,7 +181,6 @@ bool cart_load(char *cart) {
 	  } break;
 	  default: {
 		printf("UNSUPPORTED MAPPER\n");
-		exit(-1);
 	  }
 	}
     printf("\t Checksum : %2.2X (%s)\n", ctx.header->checksum, (x & 0xFF) ? "PASSED" : "FAILED");
@@ -189,14 +188,16 @@ bool cart_load(char *cart) {
     return true;
 }
 
-u8 cart_read(u16 address) {
-    //for now just ROM ONLY type supported...
-	if (ctx.header->type == 1) {
-	  if (!ctx.init) {
-		printf("INIT\n");
-		memcpy(ctx.data, ctx.rom_data, 0x8000);
-		ctx.init = true;
-	  }
+u8 cart_read_default(u16 address) {
+  return ctx.rom_data[address];
+}
+
+u8 cart_read_mbc1(u16 address) {
+  if (!ctx.init) {
+	printf("INIT\n");
+	memcpy(ctx.data, ctx.rom_data, 0x8000);
+	ctx.init = true;
+  }
 /*
     if (init) {
         //cout << "READ: " << Short(address) << endl;
@@ -212,25 +213,36 @@ u8 cart_read(u16 address) {
         //return data[address];
     }
 */
-	  if (address < 0x4000) {
-		return ctx.rom_data[address];
-	  }
+  if (address < 0x4000) {
+	return ctx.rom_data[address];
+  }
 
-	  if (ctx.bank > 1) {
-		//cout << "BANK READ: " << (int)bank << " - " << Short(address) << " to " << std::hex << (int)(address + (bank * 0x4000)) << endl;
-		//sleepMs(200);
-	  }
+  if (ctx.bank > 1) {
+	//cout << "BANK READ: " << (int)bank << " - " << Short(address) << " to " << std::hex << (int)(address + (bank * 0x4000)) << endl;
+	//sleepMs(200);
+  }
 
-	  return ctx.rom_data[address + (ctx.bank * 0x4000) - 0x4000];
-	} else {
-	  return ctx.rom_data[address];
-	}
+  return ctx.rom_data[address + (ctx.bank * 0x4000) - 0x4000];
 }
 
-void cart_write(u16 address, u8 value) {
-    //for now, ROM ONLY...
-  if (ctx.header->type == 1) {
+u8 cart_read(u16 address) {
+    //for now just ROM ONLY type supported...
+  u8 ret = 0;
+  switch (ctx.header->type) {
+	case 0: {ret = cart_read_default(address); break;}
+	case 1: {ret = cart_read_mbc1(address); break;}
+	default: {ret = cart_read_mbc1(address);}
+  }
+  return ret;
+}
 
+void cart_write_default(u16 address, u8 value) {
+  //	printf("cart_write(%04X)\n", address);
+//    NO_IMPL
+
+}
+
+void cart_write_mbc1(u16 address, u8 value) {
 	if (!ctx.init) {
 	  memcpy(ctx.data, ctx.rom_data, 0x8000);
 	  ctx.init = true;
@@ -266,9 +278,14 @@ void cart_write(u16 address, u8 value) {
 		exit(-1);
 	  }
 	}
-  } else {
-	printf("cart_write(%04X)\n", address);
+}
+
+void cart_write(u16 address, u8 value) {
+
+  switch (ctx.header->type) {
+	case 0: cart_write_default(address, value); break;
+	case 1: cart_write_mbc1(address, value); break;
+	default: cart_write_mbc1(address, value);
   }
-//    NO_IMPL
 }
 
