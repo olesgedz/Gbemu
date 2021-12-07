@@ -2,8 +2,9 @@
  Gameboy emulator
 # Screenshots
 ## Dr.Mario
-<img src="https://github.com/olesgedz/Gbemu/blob/master/docs/screenshots/DrMarioGame.png?raw=false">
-<img src="https://github.com/olesgedz/Gbemu/blob/master/docs/screenshots/Dr_Mario.png?raw=false">
+
+![text](docs/screenshots/Dr_Mario.png?raw=false)
+![This is an image](docs/screenshots/DrMarioGame.png?raw=false)
 https://github.com/alloncm/MagenBoy
  https://github.com/Baekalfen/PyBoy/raw/master/PyBoy.pdf
 https://github.com/roblouie/gameboy-emulator/
