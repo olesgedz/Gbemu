@@ -34,7 +34,7 @@ void dma_tick() {
 #ifdef WIN32
 	  Sleep(2 * 10); //TODO: something wrong with sleep
 #else
-	  sleep(2);
+	  usleep(100);
 #endif
 	}
 }
