@@ -70,6 +70,7 @@ if(WIN32)
 
   string(STRIP "${SDL2_TTF_LIBRARIES}" SDL2_TTF_LIBRARIES)
 else()
+  set (${CMAKE_PREFIX_PATH} "${CMAKE_PREFIX_PATH};${PROJECT_SOURCE_DIR}/../windows_deps/")
   list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
   find_package(SDL2 REQUIRED)
   find_package(SDL2_ttf REQUIRED)
