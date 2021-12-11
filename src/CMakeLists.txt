@@ -70,9 +70,16 @@ if(WIN32)
 
   string(STRIP "${SDL2_TTF_LIBRARIES}" SDL2_TTF_LIBRARIES)
 else()
-  list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
-  find_package(SDL2 REQUIRED)
-  find_package(SDL2_ttf REQUIRED)
+  if (UNIX AND NOT APPLE)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+  elseif(APPLE)
+    add_subdirectory(dependencies/SDL)
+    include_directories("${PROJECT_SOURCE_DIR}/dependencies/SDL/include")
+    add_subdirectory(dependencies/SDL_ttf)
+    include_directories("${PROJECT_SOURCE_DIR}/dependencies/SDL_ttf/")
+  endif()
 endif()
 
 ###############################################################################
@@ -88,10 +95,12 @@ set(CONFIG_HEADER ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 # Subdirectories
 add_subdirectory(lib)
 add_subdirectory(gbemu)
+if (NOT APPLE)
 add_subdirectory(tests)
-
+endif()
 ###############################################################################
 # Unit tests
+if (NOT APPLE)
 enable_testing()
 add_test(NAME check_gbe COMMAND check_gbe)
-
+endif()

@@ -1,3 +1,9 @@
 [submodule "windows_deps/check_s"]
 	path = windows_deps/check_s
 	url = https://github.com/libcheck/check.git
+[submodule "src/dependencies/SDL"]
+	path = src/dependencies/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "src/dependencies/SDL_ttf"]
+	path = src/dependencies/SDL_ttf
+	url = https://github.com/libsdl-org/SDL_ttf.git

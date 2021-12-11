@@ -14,9 +14,9 @@ target_link_libraries(check_gbe emu ${CHECK_LIBRARIES})
 target_include_directories(check_gbe PRIVATE ${PROJECT_SOURCE_DIR}/include )
 
 
-find_program(DEBIAN "dpkg")
 if(DEBIAN)
-    target_link_libraries(check_gbe check m rt pthread subunit)
+	find_program(DEBIAN "dpkg")
+	target_link_libraries(check_gbe check m rt pthread subunit)
 endif()
 
 if (WIN32)
