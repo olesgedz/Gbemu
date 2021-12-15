@@ -7,7 +7,7 @@
 ![This is an image](docs/screenshots/DrMarioGame.png?raw=false) -->
 ## Legend of Zelda, The - Link's Awakening
 ![text](docs/screenshots/zelda_title.png?raw=false)
-![text](docs/screenshots/zelda_gameplay.png?raw=false)
+![text](docs/screenshots/zelda_gif.gif?raw=false)
 
 ## Metroid II - Return of Samus
 ![text](docs/screenshots/metroid_title.png?raw=false)
