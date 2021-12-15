@@ -40,6 +40,7 @@ https://github.com/c-sp/gameboy-test-roms
 
 ## Ressources
 
+- [gbdev.gg8] https://gbdev.gg8.se/wiki/articles/Gameboy_Bootstrap_ROM
 - 8080 Manual (see *docs folder* - really great to understand how a cpu works)
 - [The Cycle-Accurate Game Boy Docs](https://github.com/AntonioND/giibiiadvance/blob/master/docs/TCAGBD.pdf) (Back up in the *docs* folder)
 - [Pandocs](http://bgb.bircd.org/pandocs.htm) (Backup of the Site in the *docs folder*)
