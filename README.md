@@ -1,10 +1,22 @@
 # Gbemu
  Gameboy emulator
 # Screenshots
-## Dr.Mario
+<!-- ## Dr.Mario
 
 ![text](docs/screenshots/Dr_Mario.png?raw=false)
-![This is an image](docs/screenshots/DrMarioGame.png?raw=false)
+![This is an image](docs/screenshots/DrMarioGame.png?raw=false) -->
+## Legend of Zelda, The - Link's Awakening
+![text](docs/screenshots/zelda_title.png?raw=false)
+![text](docs/screenshots/zelda_gameplay.png?raw=false)
+
+## Metroid II - Return of Samus
+![text](docs/screenshots/metroid_title.png?raw=false)
+![text](docs/screenshots/metroid_game.png?raw=false)
+
+## Kirby 2
+![text](docs/screenshots/kirby.png?raw=false)
+
+
 https://github.com/alloncm/MagenBoy
  https://github.com/Baekalfen/PyBoy/raw/master/PyBoy.pdf
 https://github.com/roblouie/gameboy-emulator/
